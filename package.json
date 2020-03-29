@@ -1,0 +1,28 @@
+{
+  "name": "interception-heatmap",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "repository": "git@github.com:mknapik/heatmap.git",
+  "author": "Michał Knapik",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/heatmap.js": "^2.0.36",
+    "@types/node": "^13.9.5",
+    "@types/plotly.js": "^1.50.0",
+    "@types/ramda": "^0.27.0",
+    "@types/react": "^16.9.27",
+    "@types/react-dom": "^16.9.5",
+    "@types/react-plotly.js": "^2.2.4",
+    "prettier": "^2.0.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "heatmap.js": "^2.0.5",
+    "plotly.js": "^1.52.3",
+    "ramda": "^0.27.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-plotly.js": "^2.4.0"
+  }
+}

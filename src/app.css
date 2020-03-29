@@ -1,0 +1,25 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  font-family: sans-serif;
+}
+body * {
+  font-weight: 200;
+}
+
+#canvas {
+    width: 800px;
+    height: 373px; 
+}
+#image {
+    background-image: url("./qwerty.png");
+    background-repeat: no-repeat;
+    width: 800px;
+    height: 373px;
+}
+.qwerty {
+}
