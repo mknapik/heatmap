@@ -12,36 +12,37 @@ type ExtractKeysOptions = {
   skipArrows?: boolean
 }
 
-function extractKeyCounts({
+const rejectKeys = <T extends {keySymbol: KeySymbol}>(list: KeySymbol[]) =>
+  R.reject<T>(({keySymbol}: T) => R.contains<string>(keySymbol)(list))
+
+const rejectLetters = rejectKeys(
+  'QWERTYUIOPASDFGHJKLZXCVBNM'.split('') as KeySymbol[],
+)
+const rejectArrows = rejectKeys(['UP', 'LEFT', 'RIGHT', 'DOWN'])
+const rejectModifiers = rejectKeys([
+  'LEFTCTRL',
+  'LEFTSHIFT',
+  'LEFTALT',
+  'LEFTMETA',
+  'RIGHTCTRL',
+  'RIGHTSHIFT',
+  'RIGHTALT',
+  'RIGHTMETA',
+  'CAPSLOCK',
+  'COMPOSE',
+  'TAB',
+  'BACKSLASH',
+])
+
+const extractKeyCounts = ({
   skipBackspace,
   skipEnter,
   skipLetters,
   skipSpace,
   skipModifiers,
   skipArrows,
-}: ExtractKeysOptions): (text: string) => KeyCount[] {
-  const rejectKeys = <T extends {keySymbol: KeySymbol}>(list: KeySymbol[]) =>
-    R.reject<T>(({keySymbol}: T) => R.contains<string>(keySymbol)(list))
-  const rejectLetters = rejectKeys(
-    'QWERTYUIOPASDFGHJKLZXCVBNM'.split('') as KeySymbol[],
-  )
-  const rejectArrows = rejectKeys(['UP', 'LEFT', 'RIGHT', 'DOWN'])
-  const rejectModifiers = rejectKeys([
-    'LEFTCTRL',
-    'LEFTSHIFT',
-    'LEFTALT',
-    'LEFTMETA',
-    'RIGHTCTRL',
-    'RIGHTSHIFT',
-    'RIGHTALT',
-    'RIGHTMETA',
-    'CAPSLOCK',
-    'COMPOSE',
-    'TAB',
-    'BACKSLASH',
-  ])
-
-  return R.pipe(
+}: ExtractKeysOptions) =>
+  R.pipe(
     (content: string) => content,
     R.pipe(
       R.split('\n'),
@@ -66,6 +67,5 @@ function extractKeyCounts({
       skipArrows ? rejectArrows : R.identity,
     ),
   )
-}
 
 export default extractKeyCounts

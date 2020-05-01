@@ -7,6 +7,9 @@ export type KeyCount = {keySymbol: KeySymbol; count: number}
 export type KeyFreq = KeyCount & {
   coordinates: Coordinates
 }
+export type KeyFreq2 = KeyCount & {
+  coordinates?: Coordinates
+}
 export type Layout = {
   name: string
   keyLayout: KeyLayout
@@ -14,6 +17,13 @@ export type Layout = {
 }
 
 export type KeyMapping = Partial<{[key in KeySymbol]: KeySymbol}>
+
+function tap<T>(fn: (t: T) => void): (t: T) => T {
+  return (t: T) => {
+    fn(t)
+    return t
+  }
+}
 
 export const extractLayoutKeys = (
   layout: KeyLayout,
@@ -24,15 +34,28 @@ export const extractLayoutKeys = (
       count,
       coordinates: layout[keySymbol],
     })),
-    // R.forEach(({keySymbol, count, coordinates}) =>
-    //   R.isNil(coordinates)
-    //     ? console.warn(
-    //         `Layout does not define key: ${keySymbol}; count: ${count}`,
-    //       )
-    //     : undefined,
-    // ),
-    R.reject(R.compose(R.isNil, R.prop('coordinates'))),
-    R.map(({coordinates, ...keys}) => ({...keys, coordinates: coordinates!})),
+    (
+      k, // bug in R.tap()() typing
+    ) =>
+      R.tap(
+        R.pipe(
+          (keys: (KeyCount & {coordinates?: Coordinates})[]) => keys,
+          R.filter(({coordinates, keySymbol, count}) => R.isNil(coordinates)),
+          R.map(({keySymbol}) => keySymbol),
+          R.tap((keys) => {
+            console.warn({
+              message: 'Layout does not define all keys',
+              keys,
+            })
+          }),
+        ),
+        k,
+      ),
+    R.reject(R.pipe(R.prop('coordinates'), R.isNil)),
+    R.map(({coordinates, ...keys}) => ({
+      ...keys,
+      coordinates: coordinates!,
+    })),
   )
 
 export const keyMapper = (layout: KeyLayout) => (
