@@ -12,6 +12,10 @@ tasks:
   dependencies:
     cmds:
       - yarn
+  start:
+    deps: [dependencies]
+    cmds:
+      - yarn run parcel src/index.html
   format:
     desc: ' '
     cmds:
@@ -22,6 +26,6 @@ tasks:
       - yarn run tsc -p .
   build:watch:
     cmds:
-      - yarn run tsc -p .
+      - yarn run tsc -p . --watch
   prerequisites:
     deps: [prerequisites:node, prerequisites:yarn]

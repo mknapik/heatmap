@@ -12,14 +12,21 @@ body * {
 }
 
 #canvas {
-    width: 800px;
+  width: 800px;
+  height: 373px;
     height: 373px; 
+  height: 373px;
 }
 #image {
-    background-image: url("./qwerty.png");
-    background-repeat: no-repeat;
-    width: 800px;
-    height: 373px;
+  background-image: url('./layouts/mac-qwerty.png');
+  background-repeat: no-repeat;
+  width: 800px;
+  height: 373px;
 }
 .qwerty {
 }
+
+/* 
+background-size: 1280px;
+width: 1280px;
+height: 407px; */

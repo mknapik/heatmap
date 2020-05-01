@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": false,
   "devDependencies": {
+    "@types/bluebird": "^3.5.30",
     "@types/heatmap.js": "^2.0.36",
     "@types/node": "^13.9.5",
     "@types/plotly.js": "^1.50.0",
@@ -14,10 +15,12 @@
     "@types/react": "^16.9.27",
     "@types/react-dom": "^16.9.5",
     "@types/react-plotly.js": "^2.2.4",
+    "parcel": "^1.12.4",
     "prettier": "^2.0.2",
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "bluebird": "^3.7.2",
     "heatmap.js": "^2.0.5",
     "plotly.js": "^1.52.3",
     "ramda": "^0.27.0",

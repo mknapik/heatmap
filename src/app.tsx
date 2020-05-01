@@ -1,13 +1,15 @@
 import React, {ChangeEvent, SyntheticEvent} from 'react'
 import heat from 'heatmap.js'
 import './app.css'
-import './qwerty.png'
-import layout, {Coordinates} from './layouts/qwerty'
+import layout, {Coordinates} from './layouts/mac-qwerty'
 import {KeySymbol} from './code-to-symbol'
 import * as R from 'ramda'
 import Plot from 'react-plotly.js'
+import Bluebird from 'bluebird'
 
-const path = require('./keycounter.log')
+const path1 = require('./keycounter.mir.log')
+const path2 = require('./keycounter.vostok.log')
+const paths: string[] = [path1, path2]
 
 namespace App {
   export type Props = {
@@ -17,7 +19,7 @@ namespace App {
     skipBackspace?: boolean
   }
   export type State = {
-    data?: {keySymbol: KeySymbol; count: number}[]
+    data?: {keySymbol: KeySymbol; count: number}[][]
   }
 }
 
@@ -28,7 +30,7 @@ class App extends React.Component<App.Props, App.State> {
     super(props)
     this.ref = React.createRef()
     this.text = this.text.bind(this)
-    this.state = {}
+    this.state = {data: []}
   }
 
   text(event: any) {
@@ -38,9 +40,10 @@ class App extends React.Component<App.Props, App.State> {
   componentDidMount() {
     const {skipBackspace, skipEnter, skipLetters, skipSpace} = this.props
 
-    fetch(path)
-      .then((response) => response.text())
-      .then((text) => {
+    Bluebird.all(paths)
+      .map((path) => fetch(path))
+      .map((response) => response.text())
+      .map((text) => {
         const rejectKeys = <T extends {keySymbol: KeySymbol}>(
           list: KeySymbol[],
         ) =>
@@ -95,12 +98,15 @@ class App extends React.Component<App.Props, App.State> {
             const [x, y] = key!
             heatmap.addData({x, y, value: count})
           }),
-          R.tap((symbols) => this.setState({data: symbols})),
         )(text)
 
-        heatmap.repaint()
+        // heatmap.repaint()
 
         // heatmap.addData({x, y, value: count})
+        return keys
+      })
+      .then((symbols) => {
+        this.setState({data: symbols})
       })
   }
 
@@ -119,15 +125,20 @@ class App extends React.Component<App.Props, App.State> {
         <h1>Histogram</h1>
         {data ? (
           <Plot
-            data={[
-              {
-                type: 'bar',
-                y: R.map(({keySymbol}) => keySymbol, data),
-                x: R.map(({count}) => count, data),
-                orientation: 'h',
+            data={data.map(
+              (data, idx): Plotly.Data => {
+                const sum = R.reduce((acc, {count}) => acc + count, 0, data)
+                return ({
+                  type: 'bar',
+                  y: R.map(({ keySymbol }) => keySymbol, data),
+                  x: R.map(({ count }) => count / sum, data),
+                  orientation: 'h',
+                  name: paths[idx],
+                })
               },
-            ]}
-            layout={{width: 1000, height: 1000}}
+              data,
+            )}
+            layout={{width: 1000, height: 1500}}
           />
         ) : undefined}
       </div>

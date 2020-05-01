@@ -3,18 +3,17 @@ import {KeySymbol} from '../code-to-symbol'
 export type Coordinates = [number, number]
 type Layout = Partial<{[key in KeySymbol]: Coordinates}>
 
-const r1 = 348
-const r2 = 295
-const d = (r1 - r2)
-const r3 = r2 - d
-const r4 = r3 - d
-const r5 = r4 - d
-const r6 = 50
+const d = 54
 
-const c1 = 55
+const r6 = 120 - d
+const r5 = 120
+const r4 = 174
+const r3 = 225
+const r2 = 275
+const r1 = 330
 
 const layout: Layout = {
-  ESC: [c1, r6],
+  ESC: [35, r6],
   F1: [35 + 1 * d, r6],
   F2: [35 + 2 * d, r6],
   F3: [35 + 3 * d, r6],
@@ -86,7 +85,7 @@ const layout: Layout = {
   SLASH: [644, r2],
   RIGHTSHIFT: [644 + d, r2],
 
-  LEFTCTRL: [c1, r1],
+  LEFTCTRL: [35 + d, r1],
   LEFTALT: [145, r1],
   LEFTMETA: [145 + d, r1],
   SPACE: [400, r1],
