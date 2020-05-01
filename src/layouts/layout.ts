@@ -15,13 +15,13 @@ export const extractLayoutKeys = (layout: Layout): ((_: KeyCount[]) => KeyFreq[]
       count,
       coordinates: layout[keySymbol],
     })),
-    R.forEach(({keySymbol, count, coordinates}) =>
-      R.isNil(coordinates)
-        ? console.warn(
-            `Layout does not define key: ${keySymbol}; count: ${count}`,
-          )
-        : undefined,
-    ),
+    // R.forEach(({keySymbol, count, coordinates}) =>
+    //   R.isNil(coordinates)
+    //     ? console.warn(
+    //         `Layout does not define key: ${keySymbol}; count: ${count}`,
+    //       )
+    //     : undefined,
+    // ),
     R.reject(R.compose(R.isNil, R.prop('coordinates'))),
     R.map(({coordinates, ...keys}) => ({...keys, coordinates: coordinates!}))
   )

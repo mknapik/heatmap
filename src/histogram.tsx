@@ -5,27 +5,28 @@ import './app.css'
 import {KeyCount} from './layouts/layout'
 
 type Props = {
-  name: string
-  data: KeyCount[][]
+  data: {
+    name: string
+    keys: KeyCount[]
+  }[]
 }
 
-export const Histogram: React.FC<Props> = ({name, data}: Props) => {
+export const Histogram: React.FC<Props> = ({data}: Props) => {
   // const sum = R.reduce((acc, {count}) => acc + count, 0, data)
   const sum = 1
 
-  console.log({data, cl: 'histogram'})
-
-  return (
+  return data.length > 0 ? (
     <Plot
-      data={data.map((data, idx) => ({
+      data={data.map(({keys, name}) => ({
         type: 'bar',
-        y: R.map(({keySymbol}) => keySymbol, data),
-        x: R.map(({count}) => count / sum, data),
+        y: R.map(({keySymbol}) => keySymbol, keys),
+        x: R.map(({count}) => count / sum, keys),
         orientation: 'h',
-        name: idx.toString(),
-        //   name: `${name}-${idx}`,
+        name,
       }))}
       layout={{width: 1000, height: 1500}}
     />
+  ) : (
+    <></>
   )
 }

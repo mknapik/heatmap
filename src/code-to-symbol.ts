@@ -881,14 +881,14 @@ const map: {[key: number]: KeySymbol} = {
   0x2ff: 'MAX',
 }
 
-const readline = require('readline')
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false,
-})
+// const readline = require('readline')
+// const rl = readline.createInterface({
+//   input: process.stdin,
+//   output: process.stdout,
+//   terminal: false,
+// })
 
-rl.on('line', (line: string) => {
-  const [code, count] = line.split(':')
-  console.log([map[parseInt(code)], count].join(':'))
-})
+// rl.on('line', (line: string) => {
+//   const [code, count] = line.split(':')
+//   console.log([map[parseInt(code)], count].join(':'))
+// })
