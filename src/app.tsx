@@ -1,6 +1,9 @@
+import 'fomantic-ui-css/semantic.css'
+import {Grid, Header} from 'semantic-ui-react'
 import Bluebird from 'bluebird'
 import React from 'react'
 import * as R from 'ramda'
+
 import './app.css'
 import extractKeyCounts from './extract-keys'
 import {KeyCount} from './layouts/layout'
@@ -90,34 +93,39 @@ class App extends React.Component<App.Props, App.State> {
 
     return (
       <div className="flex row">
-        <textarea onChange={this.text.bind(this)} />
-        <div>
-          <h1>Heatmap</h1>
-          <div className="flex column">
-            {layouts.map(({layout, name}) =>
-              data.map((data, idx) => (
-                <div className="">
-                  <h3>{name}</h3>
-                  <Heatmap
-                    key={idx}
-                    data={data}
-                    layout={layout}
-                    image={require('./layouts/mac-qwerty.png')}
-                  />
-                </div>
-              )),
-            )}
-          </div>
-        </div>
-        <div>
-          <h1>Histogram</h1>
-          <Histogram
-            data={data.map((keys, idx) => ({
-              name: names[idx],
-              keys,
-            }))}
-          />
-        </div>
+        <Grid>
+          <Grid.Column width={8} stackable>
+            <Header size="medium">Heatmap</Header>
+            <Grid>
+              {layouts.map(({layout, name}) =>
+                data.map((data, idx) => (
+                  <Grid.Row className="">
+                    <Grid.Column>
+                      <Header size="tiny">{name}</Header>
+                    </Grid.Column>
+                    <Grid.Column>
+                      <Heatmap
+                        key={idx}
+                        data={data}
+                        layout={layout}
+                        image={require('./layouts/mac-qwerty.png')}
+                      />
+                    </Grid.Column>
+                  </Grid.Row>
+                )),
+              )}
+            </Grid>
+          </Grid.Column>
+          <Grid.Column floated={'left'}>
+            <Header size="medium">Histogram</Header>
+            <Histogram
+              data={data.map((keys, idx) => ({
+                name: names[idx],
+                keys,
+              }))}
+            />
+          </Grid.Column>
+        </Grid>
       </div>
     )
   }

@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "bluebird": "^3.7.2",
+    "fomantic-ui-css": "^2.8.4",
     "heatmap.js": "^2.0.5",
     "inspector": "^0.5.0",
     "plotly.js": "^1.52.3",
@@ -29,6 +30,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-plotly.js": "^2.4.0",
+    "semantic-ui-react": "^0.88.2",
     "uuid": "^8.0.0"
   }
 }
