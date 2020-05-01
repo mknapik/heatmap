@@ -1,4 +1,4 @@
-import {Layout} from './layout'
+import {KeyLayout, keyMapper, Layout} from './layout'
 import qwerty from './mac-qwerty'
 import * as R from 'ramda'
 import {KeySymbol} from '../code-to-symbol'
@@ -37,9 +37,15 @@ const mapToQwerty: Mapping = {
   SLASH: 'SLASH',
 }
 
+const keyLayout: KeyLayout = {
+  ...qwerty.keyLayout,
+  ...keyMapper(qwerty.keyLayout)(mapToQwerty),
+}
+
 const layout: Layout = {
-  ...qwerty,
-  ...R.fromPairs(R.map(([key, q]) => [key, qwerty[q!]], R.toPairs(mapToQwerty))),
+  keyLayout,
+  name: 'mac colemak',
+  image: require('./mac-qwerty.png'),
 }
 
 export default layout

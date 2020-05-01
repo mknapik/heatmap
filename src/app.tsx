@@ -16,24 +16,7 @@ const path2 = require('./keycounter.vostok.log')
 const paths: string[] = R.take(1, [path1, path2])
 const names = ['mir', 'vostok']
 
-const layouts = [
-  {
-    layout: qwerty,
-    name: 'qwerty',
-  },
-  {
-    layout: workman,
-    name: 'workman',
-  },
-  {
-    layout: colemak,
-    name: 'colemak',
-  },
-  {
-    layout: dvorak,
-    name: 'dvorak',
-  },
-]
+const layouts = [qwerty, workman, colemak, dvorak]
 namespace App {
   export type Props = {
     skipLetters?: boolean
@@ -90,19 +73,18 @@ class App extends React.Component<App.Props, App.State> {
 
     return (
       <div className="flex row">
-        <textarea onChange={this.text.bind(this)} />
         <div>
           <h1>Heatmap</h1>
           <div className="flex column">
-            {layouts.map(({layout, name}) =>
+            {layouts.map(({keyLayout: layout, image, name}) =>
               data.map((data, idx) => (
-                <div className="">
+                <div key={idx} className="">
                   <h3>{name}</h3>
                   <Heatmap
                     key={idx}
                     data={data}
                     layout={layout}
-                    image={require('./layouts/mac-qwerty.png')}
+                    image={image}
                   />
                 </div>
               )),

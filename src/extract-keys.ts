@@ -26,21 +26,20 @@ function extractKeyCounts({
     'QWERTYUIOPASDFGHJKLZXCVBNM'.split('') as KeySymbol[],
   )
   const rejectArrows = rejectKeys(['UP', 'LEFT', 'RIGHT', 'DOWN'])
-  const rejectModifiers =
-    rejectKeys([
-      'LEFTCTRL',
-      'LEFTSHIFT',
-      'LEFTALT',
-      'LEFTMETA',
-      'RIGHTCTRL',
-      'RIGHTSHIFT',
-      'RIGHTALT',
-      'RIGHTMETA',
-      'CAPSLOCK',
-      'COMPOSE',
-      'TAB',
-      'BACKSLASH',
-    ])
+  const rejectModifiers = rejectKeys([
+    'LEFTCTRL',
+    'LEFTSHIFT',
+    'LEFTALT',
+    'LEFTMETA',
+    'RIGHTCTRL',
+    'RIGHTSHIFT',
+    'RIGHTALT',
+    'RIGHTMETA',
+    'CAPSLOCK',
+    'COMPOSE',
+    'TAB',
+    'BACKSLASH',
+  ])
 
   return R.pipe(
     (content: string) => content,

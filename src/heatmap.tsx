@@ -1,16 +1,15 @@
-
 import {v4 as uuid} from 'uuid'
 import * as R from 'ramda'
 import React from 'react'
 import heat from 'heatmap.js'
 
 import './heatmap.css'
-import {Layout, KeyCount, extractLayoutKeys} from './layouts/layout'
+import {KeyLayout, KeyCount, extractLayoutKeys} from './layouts/layout'
 
 namespace Heatmap {
   export type Props = {
     data: KeyCount[]
-    layout: Layout
+    layout: KeyLayout
     image: any
   }
   export type State = {
@@ -63,7 +62,7 @@ export class Heatmap extends React.Component<Heatmap.Props, Heatmap.State> {
   }
 
   render() {
-      const {image} = this.props
+    const {image} = this.props
     const {uid} = this.state
     const style = {backgroundImage: `url(${image})`}
     // const style = {}

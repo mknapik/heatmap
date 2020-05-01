@@ -1,9 +1,9 @@
 import {KeySymbol} from '../code-to-symbol'
-import { Layout } from './layout'
+import {KeyLayout} from './layout'
 
 const r1 = 348
 const r2 = 295
-const d = (r1 - r2)
+const d = r1 - r2
 const r3 = r2 - d
 const r4 = r3 - d
 const r5 = r4 - d
@@ -11,7 +11,7 @@ const r6 = 50
 
 const c1 = 55
 
-const layout: Layout = {
+const layout: KeyLayout = {
   ESC: [c1, r6],
   F1: [35 + 1 * d, r6],
   F2: [35 + 2 * d, r6],
