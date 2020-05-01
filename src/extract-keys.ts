@@ -3,12 +3,13 @@ import './app.css'
 import {KeySymbol} from './code-to-symbol'
 import {KeyCount} from './layouts/layout'
 
-type ExtractKeysOptions = {
+export type ExtractKeysOptions = {
   skipBackspace?: boolean
   skipEnter?: boolean
   skipLetters?: boolean
   skipSpace?: boolean
   skipModifiers?: boolean
+  skipDualKeys?: boolean
   skipArrows?: boolean
 }
 
@@ -28,7 +29,8 @@ const rejectModifiers = rejectKeys([
   'RIGHTSHIFT',
   'RIGHTALT',
   'RIGHTMETA',
-  'CAPSLOCK',
+])
+const rejectDualKeys = rejectKeys([
   'COMPOSE',
   'TAB',
   'BACKSLASH',
@@ -40,6 +42,7 @@ const extractKeyCounts = ({
   skipLetters,
   skipSpace,
   skipModifiers,
+  skipDualKeys,
   skipArrows,
 }: ExtractKeysOptions) =>
   R.pipe(
@@ -64,6 +67,7 @@ const extractKeyCounts = ({
       skipSpace ? rejectKeys(['SPACE']) : R.identity,
       skipBackspace ? rejectKeys(['BACKSPACE']) : R.identity,
       skipModifiers ? rejectModifiers : R.identity,
+      skipDualKeys ? rejectDualKeys : R.identity,
       skipArrows ? rejectArrows : R.identity,
     ),
   )

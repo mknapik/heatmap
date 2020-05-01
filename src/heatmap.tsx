@@ -40,9 +40,8 @@ export class Heatmap extends React.Component<Heatmap.Props, Heatmap.State> {
         const heatmap = heat.create({
           container: document.getElementById(canvasDomId)!,
           //   container: this.ref.current!,
-          // maxOpacity: 0.6,
-          // radius: 30,
-          // blur: 0.9,
+          maxOpacity: 0.9,
+          radius: (54 * 2) / 3,
           backgroundColor: 'rgba(1, 1, 1, 0)',
         })
 

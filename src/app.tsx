@@ -2,29 +2,26 @@ import Bluebird from 'bluebird'
 import React from 'react'
 import * as R from 'ramda'
 import './app.css'
-import extractKeyCounts from './extract-keys'
+import extractKeyCounts, { ExtractKeysOptions } from './extract-keys'
 import {KeyCount} from './layouts/layout'
 import {Histogram} from './histogram'
 import {Heatmap} from './heatmap'
-import qwerty from './layouts/mac-qwerty'
-import workman from './layouts/mac-workman'
-import dvorak from './layouts/mac-dvorak'
-import colemak from './layouts/mac-colemak'
+
+import qwerty from './layouts/pc/qwerty'
+import colemak from './layouts/pc/colemak'
+import workman from './layouts/pc/workman'
+import dvorak from './layouts/pc/dvorak'
+import norman from './layouts/pc/norman'
 
 const path1 = require('./keycounter.mir.log')
 const path2 = require('./keycounter.vostok.log')
 const paths: string[] = R.take(1, [path1, path2])
 const names = ['mir', 'vostok']
 
-const layouts = [qwerty, workman, colemak, dvorak]
+const layouts = [qwerty, colemak, workman, dvorak, norman]
+
 namespace App {
-  export type Props = {
-    skipLetters?: boolean
-    skipEnter?: boolean
-    skipSpace?: boolean
-    skipBackspace?: boolean
-    skipModifiers?: boolean
-    skipArrows?: boolean
+  export type Props = ExtractKeysOptions & {
   }
   export type State = {
     data: KeyCount[][]
@@ -43,26 +40,14 @@ class App extends React.Component<App.Props, App.State> {
   }
 
   componentDidMount() {
-    const {
-      skipBackspace,
-      skipEnter,
-      skipLetters,
-      skipSpace,
-      skipModifiers,
-      skipArrows,
-    } = this.props
+    const {...skip} = this.props
 
     Bluebird.all(paths)
       .map((path) => fetch(path))
       .map((response) => response.text())
       .map(
         extractKeyCounts({
-          skipBackspace,
-          skipEnter,
-          skipLetters,
-          skipSpace,
-          skipModifiers,
-          skipArrows,
+          ...skip,
         }),
       )
       .then((symbols) => this.setState({data: symbols}))

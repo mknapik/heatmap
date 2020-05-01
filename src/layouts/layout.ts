@@ -10,10 +10,42 @@ export type KeyFreq = KeyCount & {
 export type KeyFreq2 = KeyCount & {
   coordinates?: Coordinates
 }
-export type Layout = {
+
+export class Layout {
+    private _name: string
+
+    constructor(name: string, private keyboard: Keyboard, private mapping: KeyMapping = {}) {
+        this._name = name
+    }
+
+    get name() {
+        return `${this.keyboard.name}-${this._name}`
+    }
+
+    get dimensions() {
+        return this.keyboard.dimensions
+    }
+
+    get keyLayout() {
+        return {
+          ...this.keyboard.keyLayout,
+          ...keyMapper(this.keyboard.keyLayout)(this.mapping),
+        }
+    }
+
+    get image() {
+        return this.keyboard.image
+    }
+}
+
+export type Keyboard = {
   name: string
   keyLayout: KeyLayout
   image: any
+  dimensions: {
+    width: number
+    height: number
+  }
 }
 
 export type KeyMapping = Partial<{[key in KeySymbol]: KeySymbol}>

@@ -1,4 +1,4 @@
-import {KeyLayout, Layout} from './layout'
+import { Keyboard, KeyLayout } from '../layout'
 
 const d = 54
 
@@ -93,10 +93,14 @@ const keyLayout: KeyLayout = {
   RIGHT: [656 + 2 * d, r1 + d / 4],
 }
 
-const layout: Layout = {
+const layout: Keyboard = {
   keyLayout,
-  name: 'mac qwerty',
-  image: require('./mac-qwerty.png'),
+  name: 'mac',
+  image: require('./mac/mac.png'),
+  dimensions: {
+    width: 800,
+    height: 373,
+  },
 }
 
 export default layout

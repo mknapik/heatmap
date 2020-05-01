@@ -1,0 +1,36 @@
+import {KeyMapping} from '../layout'
+
+const mapping: KeyMapping = {
+  Q: 'Q',
+  W: 'W',
+  F: 'E',
+  P: 'R',
+  G: 'T',
+  J: 'Y',
+  L: 'U',
+  U: 'I',
+  Y: 'O',
+  SEMICOLON: 'P',
+  A: 'A',
+  R: 'S',
+  S: 'D',
+  T: 'F',
+  D: 'G',
+  H: 'H',
+  N: 'J',
+  E: 'K',
+  I: 'L',
+  O: 'SEMICOLON',
+  Z: 'Z',
+  X: 'X',
+  C: 'C',
+  V: 'V',
+  B: 'B',
+  K: 'N',
+  M: 'M',
+  COMMA: 'COMMA',
+  DOT: 'DOT',
+  SLASH: 'SLASH',
+}
+
+export default mapping
