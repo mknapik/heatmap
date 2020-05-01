@@ -1,7 +1,4 @@
-import {KeySymbol} from '../code-to-symbol'
-
-export type Coordinates = [number, number]
-type Layout = Partial<{[key in KeySymbol]: Coordinates}>
+import { Layout } from "./layout"
 
 const d = 54
 
