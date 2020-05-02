@@ -4,13 +4,15 @@ import {KeySymbol} from './code-to-symbol'
 import {KeyCount} from './layouts/layout'
 
 export type ExtractKeysOptions = {
-  skipBackspace?: boolean
-  skipEnter?: boolean
-  skipLetters?: boolean
-  skipSpace?: boolean
-  skipModifiers?: boolean
-  skipDualKeys?: boolean
-  skipArrows?: boolean
+  skipBackspace: boolean
+  skipEnter: boolean
+  skipNumbers: boolean
+  skipLetters: boolean
+  skipSpace: boolean
+  skipModifiers: boolean
+  skipDualKeys: boolean
+  skipArrows: boolean
+  skipEscape: boolean
 }
 
 const rejectKeys = <T extends {keySymbol: KeySymbol}>(list: KeySymbol[]) =>
@@ -19,6 +21,7 @@ const rejectKeys = <T extends {keySymbol: KeySymbol}>(list: KeySymbol[]) =>
 const rejectLetters = rejectKeys(
   'QWERTYUIOPASDFGHJKLZXCVBNM'.split('') as KeySymbol[],
 )
+const rejectNumbers = rejectKeys('1234567890'.split('') as KeySymbol[])
 const rejectArrows = rejectKeys(['UP', 'LEFT', 'RIGHT', 'DOWN'])
 const rejectModifiers = rejectKeys([
   'LEFTCTRL',
@@ -31,6 +34,7 @@ const rejectModifiers = rejectKeys([
   'RIGHTMETA',
 ])
 const rejectDualKeys = rejectKeys(['COMPOSE', 'TAB', 'BACKSLASH'])
+const rejectEscape = rejectKeys(['ESC'])
 
 const extractKeyCounts = ({
   skipBackspace,
@@ -40,6 +44,8 @@ const extractKeyCounts = ({
   skipModifiers,
   skipDualKeys,
   skipArrows,
+  skipEscape,
+  skipNumbers,
 }: ExtractKeysOptions) =>
   R.pipe(
     (content: string) => content,
@@ -59,12 +65,14 @@ const extractKeyCounts = ({
     })),
     R.pipe(
       skipLetters ? rejectLetters : R.identity,
+      skipNumbers ? rejectNumbers : R.identity,
       skipEnter ? rejectKeys(['ENTER']) : R.identity,
       skipSpace ? rejectKeys(['SPACE']) : R.identity,
       skipBackspace ? rejectKeys(['BACKSPACE']) : R.identity,
       skipModifiers ? rejectModifiers : R.identity,
       skipDualKeys ? rejectDualKeys : R.identity,
       skipArrows ? rejectArrows : R.identity,
+      skipEscape ? rejectEscape : R.identity,
     ),
   )
 

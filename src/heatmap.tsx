@@ -1,10 +1,13 @@
 import {v4 as uuid} from 'uuid'
 import * as R from 'ramda'
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import heat from 'heatmap.js'
+import {useDebounce} from 'use-debounce'
 
 import './heatmap.css'
 import {KeyLayout, KeyCount, extractLayoutKeys} from './layouts/layout'
+import Loading from './loading'
+import Bluebird from 'bluebird'
 
 namespace Heatmap {
   export type Props = {
@@ -14,63 +17,65 @@ namespace Heatmap {
   }
   export type State = {
     uid: string
+    ready: boolean
   }
 }
+export const Heatmap: React.FC<Heatmap.Props> = ({
+  data: dataProps,
+  image,
+  layout,
+}) => {
+  const [uid] = useState(uuid())
+  const [ready, setReady] = useState(false)
+  const [data] = useDebounce(dataProps, 500)
 
-export class Heatmap extends React.Component<Heatmap.Props, Heatmap.State> {
-  ref: React.RefObject<HTMLElement>
+  const style = {backgroundImage: `url(${image})`}
 
-  constructor(props: Heatmap.Props) {
-    super(props)
-    this.ref = React.createRef()
-    this.state = {uid: uuid()}
-  }
-
-  componentDidMount() {
-    const {data, layout} = this.props
-    const {uid} = this.state
+  useEffect(() => {
+    setReady(false)
 
     const canvasDomId = `canvas-${uid}`
-    const wrapperDomId = `wrapper-${uid}`
+    const heatmap = heat.create({
+      container: document.getElementById(canvasDomId)!,
+      maxOpacity: 0.9,
+      radius: (54 * 2) / 3,
+      backgroundColor: 'rgba(1, 1, 1, 0)',
+    })
 
-    R.pipe(
-      (keys: KeyCount[]) => keys,
-      extractLayoutKeys(layout),
-      (keys) => {
-        const heatmap = heat.create({
-          container: document.getElementById(canvasDomId)!,
-          //   container: this.ref.current!,
-          maxOpacity: 0.9,
-          radius: (54 * 2) / 3,
-          backgroundColor: 'rgba(1, 1, 1, 0)',
-        })
+    setTimeout(() => {
+      R.pipe(
+        (keys: KeyCount[]) => keys,
+        extractLayoutKeys(layout),
+        (keys) => {
+          R.forEach(({keySymbol, count, coordinates}) => {
+            const [x, y] = coordinates
 
-        var heatmapContainer = document.getElementById(wrapperDomId)!
+            heatmap.addData({
+              x,
+              y,
+              value: count,
+            })
+          }, keys)
+          return keys
+        },
+      )(data)
 
-        R.forEach(({keySymbol, count, coordinates}) => {
-          const [x, y] = coordinates
+      setReady(true)
+    })
 
-          heatmap.addData({x, y, value: count})
-        }, keys)
+    return () => {
+      if (heatmap) {
+        ;(heatmap as any)._renderer.canvas.remove()
+      }
+    }
+  }, [data])
 
-        heatmap.repaint()
-
-        return keys
-      },
-    )(data)
-  }
-
-  render() {
-    const {image} = this.props
-    const {uid} = this.state
-    const style = {backgroundImage: `url(${image})`}
-    // const style = {}
-    return uid ? (
-      <div id="image" className="image" style={style}>
-        <div id={`wrapper-${uid}`} className="wrapper">
-          <div id={`canvas-${uid}`} className="canvas" />
-        </div>
+  return (
+    <div id="image" className="image" style={style}>
+      <div id={`wrapper-${uid}`} className="wrapper">
+        <Loading ready={ready} />
+        <div id={`canvas-${uid}`} className="canvas" />
       </div>
-    ) : undefined
-  }
+    </div>
+  )
 }

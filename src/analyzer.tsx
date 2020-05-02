@@ -1,17 +1,14 @@
-import Bluebird from 'bluebird'
-import React from 'react'
 import * as R from 'ramda'
+import React from 'react'
 import './app.css'
-import extractKeyCounts, {ExtractKeysOptions} from './extract-keys'
-import {KeyCount} from './layouts/layout'
-import {Histogram} from './histogram'
 import {Heatmap} from './heatmap'
-
-import qwerty from './layouts/pc/qwerty'
+import {Histogram} from './histogram'
+import {KeyCount} from './layouts/layout'
 import colemak from './layouts/pc/colemak'
-import workman from './layouts/pc/workman'
 import dvorak from './layouts/pc/dvorak'
 import norman from './layouts/pc/norman'
+import qwerty from './layouts/pc/qwerty'
+import workman from './layouts/pc/workman'
 
 const path1 = require('./keycounter.mir.log')
 const path2 = require('./keycounter.vostok.log')
@@ -19,10 +16,12 @@ const paths: string[] = R.take(1, [path1, path2])
 const names = ['mir', 'vostok']
 
 const layouts = [qwerty, colemak, workman, dvorak, norman]
+// const layouts = [qwerty]
 
 namespace Analyzer {
   export type Props = {
     data: KeyCount[][]
+    disableForm: () => void
   }
   export type State = {}
 }
@@ -30,7 +29,6 @@ namespace Analyzer {
 class Analyzer extends React.Component<Analyzer.Props, Analyzer.State> {
   constructor(props: Analyzer.Props) {
     super(props)
-    this.state = {data: []}
   }
 
   render() {
