@@ -1,7 +1,6 @@
 import * as R from 'ramda'
 import './app.css'
 import {KeySymbol} from './code-to-symbol'
-import {KeyCount} from './layouts/layout'
 
 export type ExtractKeysOptions = {
   skipBackspace: boolean

@@ -10,7 +10,6 @@ import dvorak from './layouts/pc/dvorak'
 import norman from './layouts/pc/norman'
 import qwerty from './layouts/pc/qwerty'
 import workman from './layouts/pc/workman'
-import {Layout} from './layouts/layout'
 
 const layouts = {qwerty, colemak, workman, dvorak, norman}
 type VisibleLayouts = {[key in keyof typeof layouts]: boolean}

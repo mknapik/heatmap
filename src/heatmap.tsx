@@ -1,21 +1,11 @@
-import {v4 as uuid} from 'uuid'
-import * as R from 'ramda'
-import React, {useState, useEffect} from 'react'
 import heat from 'heatmap.js'
+import * as R from 'ramda'
+import React, {useEffect, useState} from 'react'
 import {useDebounce} from 'use-debounce'
-
+import {v4 as uuid} from 'uuid'
 import './heatmap.css'
-import {
-  KeyLayout,
-  KeyCount,
-  extractLayoutKeys,
-  findKeyCap,
-  Layout,
-} from './layouts/layout'
+import {extractLayoutKeys, KeyCount, Layout} from './layouts/layout'
 import Loading from './loading'
-import Bluebird from 'bluebird'
-import {KeySymbol} from './code-to-symbol'
-import layout from './layouts/keyboards/tenkeyless'
 import {compact} from './ramda-extensions'
 
 namespace Heatmap {
@@ -28,8 +18,6 @@ namespace Heatmap {
     ready: boolean
   }
 }
-
-const identity = <T extends {}>() => (i: T) => i
 
 export const Heatmap: React.FC<Heatmap.Props> = ({
   layout: {keyLayout, image, findKeyCap},
