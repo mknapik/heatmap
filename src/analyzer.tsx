@@ -1,4 +1,3 @@
-import * as R from 'ramda'
 import React from 'react'
 import './app.css'
 import {Heatmap} from './heatmap'
@@ -17,10 +16,10 @@ const Analyzer: React.FC<Props> = ({counts, name, layouts}) => {
       <div>
         <h1>Heatmap</h1>
         <div className="flex column">
-          {layouts.map((layout, idx) => (
-            <div key={idx} className="">
+          {layouts.map((layout) => (
+            <div key={layout.name}>
               <h3>{layout.name}</h3>
-              <Heatmap key={idx} keys={counts} layout={layout} />
+              <Heatmap keys={counts} layout={layout} />
             </div>
           ))}
         </div>

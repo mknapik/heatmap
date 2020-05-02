@@ -80,8 +80,6 @@ export const Heatmap: React.FC<Heatmap.Props> = ({
         compact,
         R.flatten,
         R.forEach((keyCap) => {
-          console.log(keyCap)
-
           ctx.font = keyCap.font
           ctx.fillText(keyCap.label, keyCap.x, keyCap.y)
         }),

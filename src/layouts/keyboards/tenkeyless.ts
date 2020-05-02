@@ -123,6 +123,7 @@ const keyLayout: KeyLayout = {
   SCROLLLOCK: [navigationX + 1 * d, r6],
   PAUSE: [navigationX + 2 * d, r6],
   BREAK: [navigationX + 2 * d, r6],
+
   INSERT: [navigationX + 0 * d, r5],
   HOME: [navigationX + 1 * d, r5],
   PAGEUP: [navigationX + 2 * d, r5],
@@ -147,6 +148,7 @@ const keyCapConfig: KeyCapConfig = {
     PAGEUP: smallFont,
     PAGEDOWN: smallFont,
 
+    SYSRQ: smallFont,
     PRINT: smallFont,
     SCROLLLOCK: smallFont,
     PAUSE: smallFont,
@@ -160,8 +162,18 @@ const keyCapConfig: KeyCapConfig = {
     ENTER: [r4c2 + 12 * d + offsetX, r3 + offsetY],
     RIGHTSHIFT: [r4c2 + 12 * d + offsetX, r2 + offsetY],
 
-    PAUSE: [navigationX + 2 * d + offsetX, r6 - offsetY / 2],
-    SYSRQ: [navigationX + 0 * d + offsetX, r6 - offsetY / 2],
+    PAUSE: [navigationX + 2 * d + offsetX - 2, r6 - offsetY / 2],
+    BREAK: [navigationX + 2 * d + offsetX - 2, r6 + offsetY],
+
+    SYSRQ: [navigationX + 0 * d + offsetX - 2, r6 - offsetY / 2],
+    PRINT: [navigationX + 0 * d + offsetX - 2, r6 + offsetY],
+
+    INSERT: [navigationX + 0 * d + offsetX - 2, r5 + offsetY],
+    HOME: [navigationX + 1 * d + offsetX - 2, r5 + offsetY],
+    PAGEUP: [navigationX + 2 * d + offsetX - 2, r5 + offsetY],
+    DELETE: [navigationX + offsetX - 4, r4 + offsetY],
+    END: [navigationX + 1 * d + offsetX + 1, r4 + offsetY],
+    PAGEDOWN: [navigationX + 2 * d + offsetX - 2, r4 + offsetY],
   },
 }
 
