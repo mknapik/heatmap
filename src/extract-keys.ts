@@ -30,11 +30,7 @@ const rejectModifiers = rejectKeys([
   'RIGHTALT',
   'RIGHTMETA',
 ])
-const rejectDualKeys = rejectKeys([
-  'COMPOSE',
-  'TAB',
-  'BACKSLASH',
-])
+const rejectDualKeys = rejectKeys(['COMPOSE', 'TAB', 'BACKSLASH'])
 
 const extractKeyCounts = ({
   skipBackspace,

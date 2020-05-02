@@ -1,4 +1,4 @@
-import { Keyboard, KeyLayout } from '../layout'
+import {Keyboard, KeyLayout} from '../layout'
 
 const d = 54
 

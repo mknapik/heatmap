@@ -2,7 +2,7 @@ import Bluebird from 'bluebird'
 import React from 'react'
 import * as R from 'ramda'
 import './app.css'
-import extractKeyCounts, { ExtractKeysOptions } from './extract-keys'
+import extractKeyCounts, {ExtractKeysOptions} from './extract-keys'
 import {KeyCount} from './layouts/layout'
 import {Histogram} from './histogram'
 import {Heatmap} from './heatmap'
@@ -12,6 +12,9 @@ import colemak from './layouts/pc/colemak'
 import workman from './layouts/pc/workman'
 import dvorak from './layouts/pc/dvorak'
 import norman from './layouts/pc/norman'
+import Analyzer from './analyzer'
+import Form from './form'
+import Loading from './loading'
 
 const path1 = require('./keycounter.mir.log')
 const path2 = require('./keycounter.vostok.log')
@@ -21,22 +24,16 @@ const names = ['mir', 'vostok']
 const layouts = [qwerty, colemak, workman, dvorak, norman]
 
 namespace App {
-  export type Props = ExtractKeysOptions & {
-  }
+  export type Props = {}
   export type State = {
-    data: KeyCount[][]
+    texts: string[]
   }
 }
 
 class App extends React.Component<App.Props, App.State> {
   constructor(props: App.Props) {
     super(props)
-    this.text = this.text.bind(this)
-    this.state = {data: []}
-  }
-
-  text(event: any) {
-    //   console.log(event.target.value);
+    this.state = {texts: []}
   }
 
   componentDidMount() {
@@ -45,47 +42,24 @@ class App extends React.Component<App.Props, App.State> {
     Bluebird.all(paths)
       .map((path) => fetch(path))
       .map((response) => response.text())
-      .map(
-        extractKeyCounts({
-          ...skip,
-        }),
-      )
-      .then((symbols) => this.setState({data: symbols}))
+      .then((texts) => this.setState({texts}))
   }
 
   render() {
-    const {data} = this.state
+    const {texts} = this.state
 
     return (
-      <div className="flex row">
-        <div>
-          <h1>Heatmap</h1>
-          <div className="flex column">
-            {layouts.map(({keyLayout: layout, image, name}) =>
-              data.map((data, idx) => (
-                <div key={idx} className="">
-                  <h3>{name}</h3>
-                  <Heatmap
-                    key={idx}
-                    data={data}
-                    layout={layout}
-                    image={image}
-                  />
-                </div>
-              )),
-            )}
-          </div>
-        </div>
-        <div>
-          <h1>Histogram</h1>
-          <Histogram
-            data={data.map((keys, idx) => ({
-              name: names[idx],
-              keys,
-            }))}
-          />
-        </div>
-      </div>
+      <Loading ready={R.complement(R.isEmpty)(texts)}>
+        <Form
+          skipArrows
+          skipBackspace
+          skipEnter
+          skipSpace
+          skipModifiers
+          skipLetters
+          texts={texts}
+        />
+      </Loading>
     )
   }
 }

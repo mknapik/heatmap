@@ -1,4 +1,4 @@
-import { KeyMapping } from "../layout"
+import {KeyMapping} from '../layout'
 
 const mapping: KeyMapping = {
   D: 'W',

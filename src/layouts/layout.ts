@@ -12,30 +12,34 @@ export type KeyFreq2 = KeyCount & {
 }
 
 export class Layout {
-    private _name: string
+  private _name: string
 
-    constructor(name: string, private keyboard: Keyboard, private mapping: KeyMapping = {}) {
-        this._name = name
-    }
+  constructor(
+    name: string,
+    private keyboard: Keyboard,
+    private mapping: KeyMapping = {},
+  ) {
+    this._name = name
+  }
 
-    get name() {
-        return `${this.keyboard.name}-${this._name}`
-    }
+  get name() {
+    return `${this.keyboard.name}-${this._name}`
+  }
 
-    get dimensions() {
-        return this.keyboard.dimensions
-    }
+  get dimensions() {
+    return this.keyboard.dimensions
+  }
 
-    get keyLayout() {
-        return {
-          ...this.keyboard.keyLayout,
-          ...keyMapper(this.keyboard.keyLayout)(this.mapping),
-        }
+  get keyLayout() {
+    return {
+      ...this.keyboard.keyLayout,
+      ...keyMapper(this.keyboard.keyLayout)(this.mapping),
     }
+  }
 
-    get image() {
-        return this.keyboard.image
-    }
+  get image() {
+    return this.keyboard.image
+  }
 }
 
 export type Keyboard = {

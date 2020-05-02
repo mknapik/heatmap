@@ -1,4 +1,4 @@
-import { KeyMapping } from "../layout"
+import {KeyMapping} from '../layout'
 
 const mapping: KeyMapping = {
   LEFTBRACE: 'MINUS',
@@ -37,6 +37,5 @@ const mapping: KeyMapping = {
   V: 'DOT',
   Z: 'SLASH',
 }
-
 
 export default mapping
