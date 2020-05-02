@@ -1,4 +1,4 @@
-import {Keyboard, KeyLayout} from '../layout'
+import {Keyboard, KeyLayout, KeyCapConfig} from '../layout'
 
 const d = 54
 const d2 = 67.5
@@ -131,10 +131,45 @@ const keyLayout: KeyLayout = {
   PAGEDOWN: [navigationX + 2 * d, r4],
 }
 
+const offsetX = -12
+const offsetY = 12
+
+const font = '12px Verdana'
+const smallFont = '10px Verdana'
+const keyCapConfig: KeyCapConfig = {
+  font,
+  offset: [offsetX, offsetY],
+  specialFonts: {
+    INSERT: smallFont,
+    DELETE: smallFont,
+    HOME: smallFont,
+    END: smallFont,
+    PAGEUP: smallFont,
+    PAGEDOWN: smallFont,
+
+    PRINT: smallFont,
+    SCROLLLOCK: smallFont,
+    PAUSE: smallFont,
+    BREAK: smallFont,
+  },
+  specialCoordinates: {
+    TAB: [r1lctrl + offsetX, r4 + offsetY],
+    CAPSLOCK: [r1lctrl + offsetX, r3 + offsetY],
+    LEFTSHIFT: [r1lctrl + offsetX, r2 + offsetY],
+
+    ENTER: [r4c2 + 12 * d + offsetX, r3 + offsetY],
+    RIGHTSHIFT: [r4c2 + 12 * d + offsetX, r2 + offsetY],
+
+    PAUSE: [navigationX + 2 * d + offsetX, r6 - offsetY / 2],
+    SYSRQ: [navigationX + 0 * d + offsetX, r6 - offsetY / 2],
+  },
+}
+
 const layout: Keyboard = {
   name: 'tenkeyless',
   keyLayout,
   image: require('./tenkeyless/tenkeyless.svg'),
+  keyCapConfig,
   dimensions: {
     width: 1005,
     height: 370,

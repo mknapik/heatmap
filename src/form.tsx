@@ -27,8 +27,6 @@ type Props = {
   name: string
 }
 
-const identity = <T extends {}>() => (i: T) => i
-
 const checkbox = (fieldName: keyof ExtractKeysOptions) => ({
   name: fieldName.replace('skip', ''),
   fieldName,

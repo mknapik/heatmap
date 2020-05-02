@@ -10,6 +10,12 @@ export type KeyFreq = KeyCount & {
 export type KeyFreq2 = KeyCount & {
   coordinates?: Coordinates
 }
+export type KeyCapConfig = {
+  offset: Coordinates
+  font: string
+  specialCoordinates: KeyLayout
+  specialFonts: Partial<{[key in KeySymbol]: string}>
+}
 
 export class Layout {
   private _name: string
@@ -30,11 +36,15 @@ export class Layout {
     return this.keyboard.dimensions
   }
 
-  get keyLayout() {
+  get keyLayout(): KeyLayout {
     return {
       ...this.keyboard.keyLayout,
       ...keyMapper(this.keyboard.keyLayout)(this.mapping),
     }
+  }
+
+  get findKeyCap() {
+    return findKeyCap(this.keyboard.keyCapConfig)(this.keyLayout)
   }
 
   get image() {
@@ -46,6 +56,7 @@ export type Keyboard = {
   name: string
   keyLayout: KeyLayout
   image: any
+  keyCapConfig: KeyCapConfig
   dimensions: {
     width: number
     height: number
@@ -98,3 +109,81 @@ export const keyMapper = (layout: KeyLayout) => (
   mapping: KeyMapping,
 ): KeyLayout =>
   R.fromPairs(R.map(([key, q]) => [key, layout[q!]], R.toPairs(mapping)))
+
+type KeyCapLabel = string
+
+const keyCaps: Partial<{[key in KeySymbol]: KeyCapLabel}> = {
+  RIGHTALT: 'Alt',
+  RIGHTCTRL: 'Ctrl',
+  RIGHTMETA: 'Meta',
+  RIGHTSHIFT: 'Shift',
+
+  LEFTALT: 'Alt',
+  LEFTCTRL: 'Ctrl',
+  LEFTMETA: 'Meta',
+  LEFTSHIFT: 'Shift',
+
+  RIGHTBRACE: '[',
+  LEFTBRACE: '[',
+
+  LEFT: '←',
+  DOWN: '↓',
+  RIGHT: '→',
+  UP: '↑',
+
+  MINUS: '-',
+  EQUAL: '=',
+  SEMICOLON: ';',
+  APOSTROPHE: "'",
+  COMMA: ',',
+  DOT: '.',
+
+  //  ESC: 'Esc',
+  PRINT: 'PrtScn',
+  //  PAUSE: 'Pause',
+  //  DELETE: 'Delete',
+  //  BACKSPACE: 'Backspace',
+  CAPSLOCK: 'Caps Lock',
+  // ENTER: 'Enter',
+  BACKSLASH: '\\',
+  SLASH: '/',
+  GRAVE: '`',
+  SCROLLLOCK: 'ScrLk',
+  COMPOSE: 'Menu',
+  SPACE: ' ',
+
+  PAGEDOWN: 'PgDw',
+  PAGEUP: 'PgUp',
+}
+
+const offset = (o: Coordinates) => (
+  coordinates: Coordinates | undefined,
+): Coordinates | undefined =>
+  coordinates ? [o[0] + coordinates[0], o[1] + coordinates[1]] : undefined
+
+type KeyCap = {
+  label: string
+  font: string
+  x: number
+  y: number
+}
+
+export const findKeyCap = (config: KeyCapConfig) => (layout: KeyLayout) => (
+  k: KeySymbol,
+): KeyCap[] => {
+  const cap =
+    keyCaps[k] ||
+    k.toString().charAt(0).toUpperCase() + k.toString().slice(1).toLowerCase()
+  const coordinates =
+    config.specialCoordinates[k] || offset(config.offset)(layout[k])
+  return coordinates
+    ? [
+        {
+          label: cap,
+          font: config.specialFonts[k] || config.font,
+          x: coordinates[0],
+          y: coordinates[1],
+        },
+      ]
+    : []
+}

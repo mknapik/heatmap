@@ -17,10 +17,10 @@ const Analyzer: React.FC<Props> = ({counts, name, layouts}) => {
       <div>
         <h1>Heatmap</h1>
         <div className="flex column">
-          {layouts.map(({keyLayout: layout, image, name}, idx) => (
+          {layouts.map((layout, idx) => (
             <div key={idx} className="">
-              <h3>{name}</h3>
-              <Heatmap key={idx} data={counts} layout={layout} image={image} />
+              <h3>{layout.name}</h3>
+              <Heatmap key={idx} keys={counts} layout={layout} />
             </div>
           ))}
         </div>

@@ -1,4 +1,4 @@
-import {Keyboard, KeyLayout} from '../layout'
+import {Keyboard, KeyLayout, KeyCapConfig} from '../layout'
 
 const d = 54
 
@@ -93,10 +93,18 @@ const keyLayout: KeyLayout = {
   RIGHT: [656 + 2 * d, r1 + d / 4],
 }
 
+const keyCapConfig: KeyCapConfig = {
+  font: '10px Monaco',
+  offset: [0, 0],
+  specialCoordinates: {},
+  specialFonts: {},
+}
+
 const layout: Keyboard = {
   keyLayout,
   name: 'mac',
   image: require('./mac/mac.png'),
+  keyCapConfig,
   dimensions: {
     width: 800,
     height: 373,
