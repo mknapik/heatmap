@@ -1,141 +1,114 @@
 import * as R from 'ramda'
-import React from 'react'
+import React, {useState} from 'react'
 import Analyzer from './analyzer'
 import './app.css'
 import extractKeyCounts, {ExtractKeysOptions} from './extract-keys'
+import Checkbox from './checkbox'
 
-namespace Form {
-  export type Props = {
-    texts: string[]
-  }
-  export type State = ExtractKeysOptions & {
-    disabled: boolean
-  }
+import colemak from './layouts/pc/colemak'
+import dvorak from './layouts/pc/dvorak'
+import norman from './layouts/pc/norman'
+import qwerty from './layouts/pc/qwerty'
+import workman from './layouts/pc/workman'
+import {Layout} from './layouts/layout'
+
+const layouts = {qwerty, colemak, workman, dvorak, norman}
+type VisibleLayouts = {[key in keyof typeof layouts]: boolean}
+const visibleLayouts: VisibleLayouts = {
+  qwerty: true,
+  colemak: true,
+  workman: true,
+  dvorak: true,
+  norman: true,
 }
+
+type Props = {
+  text: string
+  name: string
+}
+
+const identity = <T extends {}>() => (i: T) => i
 
 const checkbox = (fieldName: keyof ExtractKeysOptions) => ({
   name: fieldName.replace('skip', ''),
   fieldName,
 })
 
-namespace Checkbox {
-  export type Props = {
-    label: string
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-    checked: boolean
-    disabled?: boolean
-  }
-}
+const Form: React.FC<Props> = ({text, name}) => {
+  const [disabled, setDisabled] = useState(false)
 
-const Checkbox: React.FC<Checkbox.Props> = ({
-  label,
-  checked,
-  onChange,
-  disabled,
-}) => (
-  <label>
-    {label}:
-    <input
-      disabled={disabled}
-      type="checkbox"
-      checked={checked}
-      onChange={onChange}
-    />{' '}
-  </label>
-)
+  const [skips, setSkips] = useState<ExtractKeysOptions>({
+    skipLetters: false,
+    skipNumbers: false,
+    skipArrows: true,
+    skipDualKeys: true,
+    skipModifiers: true,
+    skipEnter: true,
+    skipEscape: true,
+    skipBackspace: true,
+    skipSpace: true,
+  })
+  const [l, setLayouts] = useState<VisibleLayouts>(visibleLayouts)
 
-class Form extends React.Component<Form.Props, Form.State> {
-  constructor(props: Form.Props) {
-    super(props)
-    this.state = {
-      disabled: false,
-      skipEscape: false,
-      skipArrows: false,
-      skipBackspace: false,
-      skipDualKeys: false,
-      skipEnter: false,
-      skipLetters: false,
-      skipNumbers: false,
-      skipModifiers: false,
-      skipSpace: false,
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.disableForm = this.disableForm.bind(this)
-  }
-
-  handleChange(
-    name: keyof ExtractKeysOptions,
+  const handleChange = (name: keyof ExtractKeysOptions) => (
     event: React.ChangeEvent<HTMLInputElement>,
-  ) {
-    this.setState({
+  ) =>
+    setSkips({
+      ...skips,
       [name]: !event.target.checked,
-    } as any)
-  }
+    })
 
-  disableForm(disabled: boolean = true) {
-    this.setState({disabled} as any)
-  }
+  const handleChangeKeyboard = (name: keyof VisibleLayouts) => (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) =>
+    setLayouts({
+      ...l,
+      [name]: event.target.checked,
+    })
 
-  render() {
-    const {texts} = this.props
-    const {disabled, ...skips} = this.state
+  const checkboxes = R.map(checkbox, R.keys(skips))
 
-    const data = R.map(
-      extractKeyCounts({
-        ...skips,
-      }),
-      texts,
-    )
+  const counts = extractKeyCounts(skips)(text)
 
-    const checkboxes = R.map(checkbox, R.keys(skips))
-
-    return (
-      <div>
-        <form>
-          <input
-            type="reset"
-            onClick={(e) =>
-              R.map(
-                ({fieldName}) =>
-                  this.handleChange(fieldName, {
-                    target: {checked: true},
-                  } as any),
-                checkboxes,
-              )
-            }
-            value="check all"
-          />
-          <input
-            type="reset"
-            onClick={(e) =>
-              R.map(
-                ({fieldName}) =>
-                  this.handleChange(fieldName, {
-                    target: {checked: false},
-                  } as any),
-                checkboxes,
-              )
-            }
-            value="uncheck all"
-          />
-
-          {R.map(
-            ({name, fieldName}) => (
-              <Checkbox
-                key={fieldName}
-                label={name}
-                disabled={disabled}
-                checked={!this.state[fieldName]}
-                onChange={(e) => this.handleChange(fieldName, e)}
-              />
-            ),
-            checkboxes,
-          )}
-        </form>
-        <Analyzer disableForm={this.disableForm} data={data} {...skips} />
-      </div>
-    )
-  }
+  return (
+    <div>
+      <form>
+        {R.map(
+          ({name, fieldName}) => (
+            <Checkbox
+              key={fieldName}
+              label={name}
+              checked={!skips[fieldName]}
+              onChange={handleChange(fieldName)}
+            />
+          ),
+          checkboxes,
+        )}
+      </form>
+      <form>
+        {R.map(
+          (layout) => (
+            <Checkbox
+              key={layout}
+              label={layout}
+              checked={l[layout]}
+              onChange={handleChangeKeyboard(layout)}
+            />
+          ),
+          R.keys(l),
+        )}
+      </form>
+      <Analyzer
+        counts={counts}
+        name={name}
+        layouts={R.map(
+          (key: keyof VisibleLayouts) => layouts[key],
+          R.filter((key) => l[key], R.keys(layouts)),
+        )}
+        {...skips}
+      />
+    </div>
+  )
 }
 
 export default Form

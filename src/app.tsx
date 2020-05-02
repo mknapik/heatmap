@@ -1,43 +1,30 @@
 import Bluebird from 'bluebird'
 import * as R from 'ramda'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import './app.css'
 import Form from './form'
 import Loading from './loading'
 
-const path1 = require('./keycounter.mir.log')
-const path2 = require('./keycounter.vostok.log')
-const paths: string[] = R.take(1, [path1, path2])
+const path = require('./keycounter.mir.log')
+const name = 'mir'
 
-namespace App {
-  export type Props = {}
-  export type State = {
-    texts: string[]
-  }
-}
+type Props = {}
 
-class App extends React.Component<App.Props, App.State> {
-  constructor(props: App.Props) {
-    super(props)
-    this.state = {texts: []}
-  }
+const App: React.FC<Props> = () => {
+  const [text, setTexts] = useState<string | undefined>(undefined)
 
-  componentDidMount() {
-    Bluebird.all(paths)
-      .map((path) => fetch(path))
-      .map((response) => response.text())
-      .then((texts) => this.setState({texts}))
-  }
+  useEffect(() => {
+    Bluebird.resolve(path)
+      .then(fetch)
+      .then((response) => response.text())
+      .then((text) => setTexts(text))
+  }, [])
 
-  render() {
-    const {texts} = this.state
-
-    return (
-      <Loading ready={R.complement(R.isEmpty)(texts)}>
-        <Form texts={texts} />
-      </Loading>
-    )
-  }
+  return (
+    <Loading ready={!!text}>
+      <Form name={name} text={text!} />
+    </Loading>
+  )
 }
 
 export default App
