@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const Histogram: React.FC<Props> = ({name, keys}) => {
-  // const sum = R.reduce((acc, {count}) => acc + count, 0, data)
+  // const sum = R.reduce((acc, {count}) => acc + count, 0, keys)
   const sum = 1
 
   return (

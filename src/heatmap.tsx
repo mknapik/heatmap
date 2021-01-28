@@ -12,6 +12,7 @@ namespace Heatmap {
   export type Props = {
     layout: Layout
     keys: KeyCount[]
+    name: string
   }
   export type State = {
     uid: string
@@ -21,6 +22,7 @@ namespace Heatmap {
 
 export const Heatmap: React.FC<Heatmap.Props> = ({
   layout: {keyLayout, image, findKeyCap},
+  name,
   keys,
 }) => {
   const [uid] = useState(uuid())
@@ -45,7 +47,7 @@ export const Heatmap: React.FC<Heatmap.Props> = ({
     setTimeout(() => {
       R.pipe(
         (keys: KeyCount[]) => keys,
-        extractLayoutKeys(keyLayout),
+        extractLayoutKeys(name)(keyLayout),
         (keys) => {
           R.forEach(({keySymbol, count, coordinates}) => {
             const [x, y] = coordinates

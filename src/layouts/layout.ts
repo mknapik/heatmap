@@ -73,7 +73,24 @@ function tap<T>(fn: (t: T) => void): (t: T) => T {
   }
 }
 
-export const extractLayoutKeys = (
+const reportUnhandledKeys = R.tap<KeyCountCoord[]>(
+  R.pipe(
+    (keys: KeyCountCoord[]) => keys,
+    R.filter(({coordinates, keySymbol, count}) => R.isNil(coordinates)),
+    R.map(({keySymbol}) => keySymbol),
+    R.tap((keys) => {
+      if (keys.length !== 0) {
+        console.warn({
+          message: 'Layout does not define all keys',
+          keys,
+          name,
+        })
+      }
+    }),
+  ),
+)
+
+export const extractLayoutKeys = (name: string) => (
   layout: KeyLayout,
 ): ((_: KeyCount[]) => KeyFreq[]) =>
   R.pipe(
@@ -84,19 +101,7 @@ export const extractLayoutKeys = (
         coordinates: layout[keySymbol],
       }),
     ),
-    R.tap(
-      R.pipe(
-        (keys: KeyCountCoord[]) => keys,
-        R.filter(({coordinates, keySymbol, count}) => R.isNil(coordinates)),
-        R.map(({keySymbol}) => keySymbol),
-        R.tap((keys) => {
-          console.warn({
-            message: 'Layout does not define all keys',
-            keys,
-          })
-        }),
-      ),
-    ),
+    reportUnhandledKeys,
     R.reject((a: KeyCountCoord) => R.isNil(a.coordinates)),
     R.reject<KeyCountCoord>(R.pipe(R.prop('coordinates'), R.isNil)),
     R.map(({coordinates, ...keys}) => ({

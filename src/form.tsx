@@ -36,14 +36,20 @@ const Form: React.FC<Props> = ({text, name}) => {
 
   const [skips, setSkips] = useState<ExtractKeysOptions>({
     skipLetters: false,
-    skipNumbers: false,
+    skipPunctuation: false,
+    skipNumbers: true,
     skipArrows: true,
+    skipNavigation: true,
     skipDualKeys: true,
     skipModifiers: true,
     skipEnter: true,
     skipEscape: true,
     skipBackspace: true,
     skipSpace: true,
+    skipFunction: true,
+    skipOther: true,
+    skipNumpad: true,
+    skipOrphans: true,
   })
   const [l, setLayouts] = useState<VisibleLayouts>(visibleLayouts)
 
