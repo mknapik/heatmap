@@ -1453,11 +1453,6 @@ binary-search-bounds@^2.0.3, binary-search-bounds@^2.0.4:
   resolved "https://registry.yarnpkg.com/binary-search-bounds/-/binary-search-bounds-2.0.4.tgz#eea0e4081da93baa851c7d851a7e636c3d51307f"
   integrity sha512-2hg5kgdKql5ClF2ErBcSx0U5bnl5hgS4v7wMnLFodyR47yMtj2w+UAZB+0CiqyHct2q543i7Bi4/aMIegorCCg==
 
-bindings@1.2.x:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.2.1.tgz#14ad6113812d2d37d72e67b4cacb4bb726505f11"
-  integrity sha1-FK1hE4EtLTfXLme0ystLtyZQXxE=
-
 bindings@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
@@ -1678,14 +1673,6 @@ buffer@^4.3.0:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-bufferutil@1.1.x:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/bufferutil/-/bufferutil-1.1.0.tgz#3f96be77a7f8652ff69ef29f1cabc8b89f7fd972"
-  integrity sha1-P5a+d6f4ZS/2nvKfHKvIuJ9/2XI=
-  dependencies:
-    bindings "1.2.x"
-    nan "1.8.x"
-
 builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
@@ -1751,9 +1738,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001043:
-  version "1.0.30001048"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001048.tgz#4bb4f1bc2eb304e5e1154da80b93dee3f1cf447e"
-  integrity sha512-g1iSHKVxornw0K8LG9LLdf+Fxnv7T1Z+mMsf0/YYLclQX4Cd522Ap0Lrw6NFqHgezit78dtyWxzlV2Xfc7vgRg==
+  version "1.0.30001180"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001180.tgz"
+  integrity sha512-n8JVqXuZMVSPKiPiypjFtDTXc4jWIdjxull0f92WLo7e1MSi3uJ3NvveakSh/aCl1QKFAvIz3vIj0v+0K+FrXw==
 
 canvas-fit@^1.5.0:
   version "1.5.0"
@@ -2900,13 +2887,6 @@ end-of-stream@^1.0.0:
   integrity sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==
   dependencies:
     once "^1.4.0"
-
-endpoint@0.4.x:
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/endpoint/-/endpoint-0.4.5.tgz#8a32db66ad94c3161d279ed1ab4ffb6c4101b79a"
-  integrity sha1-ijLbZq2UwxYdJ57Rq0/7bEEBt5o=
-  dependencies:
-    inherits "^2.0.1"
 
 entities@^1.1.1, entities@^1.1.2:
   version "1.1.2"
@@ -4300,14 +4280,6 @@ inherits@2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
-inspector@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/inspector/-/inspector-0.5.0.tgz#a26465dcb58858352cf42977e691efacea88f501"
-  integrity sha1-omRl3LWIWDUs9Cl35pHvrOqI9QE=
-  dependencies:
-    endpoint "0.4.x"
-    ws "0.7.x"
-
 interval-tree-1d@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/interval-tree-1d/-/interval-tree-1d-1.0.3.tgz#8fdbde02b6b2c7dbdead636bcbed8e08710d85c1"
@@ -5177,11 +5149,6 @@ murmurhash-js@^1.0.0:
   resolved "https://registry.yarnpkg.com/murmurhash-js/-/murmurhash-js-1.0.0.tgz#b06278e21fc6c37fa5313732b0412bcb6ae15f51"
   integrity sha1-sGJ44h/Gw3+lMTcysEEry2rhX1E=
 
-nan@1.8.x:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-1.8.4.tgz#3c76b5382eab33e44b758d2813ca9d92e9342f34"
-  integrity sha1-PHa1OC6rM+RLdY0oE8qdkuk0LzQ=
-
 nan@^2.12.1:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"
@@ -5547,11 +5514,6 @@ optionator@^0.8.1:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
     word-wrap "~1.2.3"
-
-options@>=0.0.5:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/options/-/options-0.0.6.tgz#ec22d312806bb53e731773e7cdaefcf1c643128f"
-  integrity sha1-7CLTEoBrtT5zF3Pnza788cZDEo8=
 
 ora@^2.1.0:
   version "2.1.0"
@@ -8003,11 +7965,6 @@ uglify-to-browserify@~1.0.0:
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
   integrity sha1-bgkk1r2mta/jSeOabWMoUKD4grc=
 
-ultron@1.0.x:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.0.2.tgz#ace116ab557cd197386a4e88f4685378c8b2e4fa"
-  integrity sha1-rOEWq1V80Zc4ak6I9GhTeMiy5Po=
-
 uncss@^0.17.2:
   version "0.17.3"
   resolved "https://registry.yarnpkg.com/uncss/-/uncss-0.17.3.tgz#50fc1eb4ed573ffff763458d801cd86e4d69ea11"
@@ -8136,14 +8093,6 @@ use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
   integrity sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
-
-utf-8-validate@1.1.x:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/utf-8-validate/-/utf-8-validate-1.1.0.tgz#521a6bb2189d0b307ddc5b79c3c95a5fd8085db4"
-  integrity sha1-UhprshidCzB93Ft5w8laX9gIXbQ=
-  dependencies:
-    bindings "1.2.x"
-    nan "1.8.x"
 
 util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   version "1.0.2"
@@ -8463,17 +8412,6 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
-
-ws@0.7.x:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-0.7.2.tgz#438c560bdfa2b7da3dd5b6b46ed61325c24699d8"
-  integrity sha1-Q4xWC9+it9o91ba0btYTJcJGmdg=
-  dependencies:
-    options ">=0.0.5"
-    ultron "1.0.x"
-  optionalDependencies:
-    bufferutil "1.1.x"
-    utf-8-validate "1.1.x"
 
 ws@^5.1.1:
   version "5.2.2"
