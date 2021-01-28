@@ -8,7 +8,11 @@ vars:
 tasks:
   default:
     cmds:
+      - task: dependencies
+      - task: default:all
       - task: build
+  default:all:
+    deps: [format:check, lint, compile]
   dependencies:
     cmds:
       - yarn
@@ -19,12 +23,23 @@ tasks:
   format:
     desc: ' '
     cmds:
-      - |-
-        npx prettier --write --list-different "{{.PRETTIER_GLOB}}"
+      - npx prettier --write --list-different "{{.PRETTIER_GLOB}}"
+  format:check:
+    desc: ' '
+    cmds:
+      - npx prettier --list-different "{{.PRETTIER_GLOB}}"
+  lint:
+    desc: ' '
+    cmds:
+      - hadolint Dockerfile
   build:
+    desc: ' '
+    cmds:
+      - yarn run parcel build src/index.html --out-dir out
+  compile:
     cmds:
       - yarn run tsc -p .
-  build:watch:
+  compile:watch:
     cmds:
       - yarn run tsc -p . --watch
   hook:format:
@@ -33,7 +48,11 @@ tasks:
       - |-
         npx prettier --list-different "{{.PRETTIER_GLOB}}"
   prerequisites:
-    deps: [prerequisites:node, prerequisites:yarn, prerequisites:lefthook]
+    deps:
+      - prerequisites:node
+      - prerequisites:yarn
+      - prerequisites:lefthook
+      - prerequisites:hadolint
   prerequisites:node:
     status:
       - command -v node
@@ -43,3 +62,6 @@ tasks:
   prerequisites:lefthook:
     status:
       - command -v lefthook
+  prerequisites:hadolint:
+    status:
+      - command -v hadolint
