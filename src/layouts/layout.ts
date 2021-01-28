@@ -64,6 +64,7 @@ export type Keyboard = {
 }
 
 export type KeyMapping = Partial<{[key in KeySymbol]: KeySymbol}>
+type KeyCountCoord = KeyCount & {coordinates: Coordinates | undefined}
 
 function tap<T>(fn: (t: T) => void): (t: T) => T {
   return (t: T) => {
@@ -76,29 +77,28 @@ export const extractLayoutKeys = (
   layout: KeyLayout,
 ): ((_: KeyCount[]) => KeyFreq[]) =>
   R.pipe(
-    R.map(({keySymbol, count}: KeyCount) => ({
-      keySymbol,
-      count,
-      coordinates: layout[keySymbol],
-    })),
-    (
-      k, // bug in R.tap()() typing
-    ) =>
-      R.tap(
-        R.pipe(
-          (keys: (KeyCount & {coordinates?: Coordinates})[]) => keys,
-          R.filter(({coordinates, keySymbol, count}) => R.isNil(coordinates)),
-          R.map(({keySymbol}) => keySymbol),
-          R.tap((keys) => {
-            console.warn({
-              message: 'Layout does not define all keys',
-              keys,
-            })
-          }),
-        ),
-        k,
+    R.map(
+      ({keySymbol, count}: KeyCount): KeyCountCoord => ({
+        keySymbol,
+        count,
+        coordinates: layout[keySymbol],
+      }),
+    ),
+    R.tap(
+      R.pipe(
+        (keys: KeyCountCoord[]) => keys,
+        R.filter(({coordinates, keySymbol, count}) => R.isNil(coordinates)),
+        R.map(({keySymbol}) => keySymbol),
+        R.tap((keys) => {
+          console.warn({
+            message: 'Layout does not define all keys',
+            keys,
+          })
+        }),
       ),
-    R.reject(R.pipe(R.prop('coordinates'), R.isNil)),
+    ),
+    R.reject((a: KeyCountCoord) => R.isNil(a.coordinates)),
+    R.reject<KeyCountCoord>(R.pipe(R.prop('coordinates'), R.isNil)),
     R.map(({coordinates, ...keys}) => ({
       ...keys,
       coordinates: coordinates!,
