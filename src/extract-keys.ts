@@ -20,15 +20,15 @@ export type ExtractKeysOptions = {
   skipNumpad: boolean
 }
 
-const rejectKeys = <T extends {keySymbol: KeySymbol}>(list: KeySymbol[]) =>
-  R.reject<T>(({keySymbol}: T) => R.contains<string>(keySymbol)(list))
+const includeKeys = <T extends {keySymbol: KeySymbol}>(list: KeySymbol[]) =>
+  R.filter<T>(({keySymbol}: T) => R.contains<string>(keySymbol)(list))
 
-const rejectLetters = rejectKeys(
+const includeLetters = includeKeys(
   'QWERTYUIOPASDFGHJKLZXCVBNM'.split('') as KeySymbol[],
 )
-const rejectNumbers = rejectKeys('1234567890'.split('') as KeySymbol[])
-const rejectArrows = rejectKeys(['UP', 'LEFT', 'RIGHT', 'DOWN'])
-const rejectModifiers = rejectKeys([
+const includeNumbers = includeKeys('1234567890'.split('') as KeySymbol[])
+const includeArrows = includeKeys(['UP', 'LEFT', 'RIGHT', 'DOWN'])
+const includeModifiers = includeKeys([
   'LEFTCTRL',
   'LEFTSHIFT',
   'LEFTALT',
@@ -38,9 +38,9 @@ const rejectModifiers = rejectKeys([
   'RIGHTALT',
   'RIGHTMETA',
 ])
-const rejectDualKeys = rejectKeys(['COMPOSE', 'TAB', 'BACKSLASH'])
-const rejectEscape = rejectKeys(['ESC'])
-const rejectPunctuation = rejectKeys([
+const includeDualKeys = includeKeys(['COMPOSE', 'TAB', 'BACKSLASH'])
+const includeEscape = includeKeys(['ESC'])
+const includePunctuation = includeKeys([
   'MINUS',
   'EQUAL',
   'GRAVE',
@@ -53,11 +53,11 @@ const rejectPunctuation = rejectKeys([
   'SLASH',
   'BACKSLASH',
 ])
-const rejectNavigation = rejectKeys(['PAGEDOWN', 'PAGEUP', 'HOME', 'END'])
-const rejectEnter = rejectKeys(['ENTER'])
-const rejectSpace = rejectKeys(['SPACE'])
-const rejectBackspace = rejectKeys(['BACKSPACE'])
-const rejectFunction = rejectKeys([
+const includeNavigation = includeKeys(['PAGEDOWN', 'PAGEUP', 'HOME', 'END'])
+const includeEnter = includeKeys(['ENTER'])
+const includeSpace = includeKeys(['SPACE'])
+const includeBackspace = includeKeys(['BACKSPACE'])
+const includeFunction = includeKeys([
   'F1',
   'F2',
   'F3',
@@ -83,15 +83,15 @@ const rejectFunction = rejectKeys([
   'F23',
   'F24',
 ])
-const rejectOther = rejectKeys([
+const includeOther = includeKeys([
   'SYSRQ',
   'PAUSE',
   'INSERT',
   'DELETE',
   'SCROLLLOCK',
 ])
-const rejectOrphans = rejectKeys([])
-const rejectNumpad = rejectKeys([
+const includeOrphans = includeKeys([])
+const includeNumpad = includeKeys([
   'KP0',
   'KP1',
   'KP2',
@@ -150,26 +150,33 @@ const extractKeyCounts = ({
       keySymbol,
       count,
     })),
-    R.pipe(
-      skipLetters ? rejectLetters : R.identity,
-      skipNumbers ? rejectNumbers : R.identity,
-      skipEnter ? rejectEnter : R.identity,
-      skipSpace ? rejectSpace : R.identity,
-      skipBackspace ? rejectBackspace : R.identity,
-      skipModifiers ? rejectModifiers : R.identity,
-      skipDualKeys ? rejectDualKeys : R.identity,
-      skipArrows ? rejectArrows : R.identity,
-      skipNavigation ? rejectNavigation : R.identity,
-      R.pipe(
-        (i: SymbolCount[]) => i,
-        skipEscape ? rejectEscape : R.identity,
-        skipPunctuation ? rejectPunctuation : R.identity,
-        skipFunction ? rejectFunction : R.identity,
-        skipOther ? rejectOther : R.identity,
-        skipOrphans ? rejectOrphans : R.identity,
-        skipNumpad ? rejectNumpad : R.identity,
-      ),
-    ),
+    (keys) => {
+      const fnss = [
+        skipLetters ? [] : [includeLetters],
+        skipNumbers ? [] : [includeNumbers],
+        skipEnter ? [] : [includeEnter],
+        skipSpace ? [] : [includeSpace],
+        skipBackspace ? [] : [includeBackspace],
+        skipModifiers ? [] : [includeModifiers],
+        skipDualKeys ? [] : [includeDualKeys],
+        skipArrows ? [] : [includeArrows],
+        skipNavigation ? [] : [includeNavigation],
+        skipEscape ? [] : [includeEscape],
+        skipPunctuation ? [] : [includePunctuation],
+        skipFunction ? [] : [includeFunction],
+        skipOther ? [] : [includeOther],
+        skipOrphans ? [] : [includeOrphans],
+        skipNumpad ? [] : [includeNumpad],
+      ]
+
+      return R.pipe(
+        () => fnss,
+        R.flatten,
+        R.map((fn) => fn(keys)),
+        R.flatten,
+        R.uniqBy(R.prop('keySymbol')),
+      )()
+    },
   )
 
 export default extractKeyCounts
