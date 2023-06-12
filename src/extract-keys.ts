@@ -117,6 +117,12 @@ const includeNumpad = includeKeys([
 ])
 type SymbolCount = {keySymbol: KeySymbol; count: number}
 
+type OptToFilter = {
+  [k in keyof ExtractKeysOptions]: <T extends {keySymbol: KeySymbol}>(
+    t: T[],
+  ) => T[]
+}
+
 const extractKeyCounts = ({
   skipBackspace,
   skipEnter,
